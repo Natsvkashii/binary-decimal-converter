@@ -1,6 +1,7 @@
 #include <iostream>
 #include <windows.h>
 #include <sstream>
+#include <string.h>
 
 // MATH POWER
 int power(int base, int exponent) { //I know the math.h exist, but I prefear do it myself :P
@@ -13,7 +14,7 @@ int power(int base, int exponent) { //I know the math.h exist, but I prefear do 
 }
 
 //BINARY TO DECIMAL CONVERTER
-int binaryToDecimal(unsigned int numberToConvert) {
+int binaryToDecimal(unsigned long numberToConvert) {
 	int lastDigit;
 	int decimalConverted = 0;
 	int value = std::to_string(numberToConvert).length(); //output the numberToConvert lenght
@@ -33,23 +34,24 @@ int binaryToDecimal(unsigned int numberToConvert) {
 }
 
 // DECIMAL TO BINARY CONVERTER
-int decimalToBinary(int numberToConvert) { //DOESN'T WORK!
+int decimalToBinary(unsigned long numberToConvert) { //DOESN'T WORK!
 	int exponent = 0;
-	bool result[20] = { 0 };
+	bool result;
 
 	while (numberToConvert > power(2, exponent)) exponent++; //select the maxium exponent for power of 2
 
+	std::cout << "\nResult: ";
 	for (int i = exponent; i >= 0; i--) {
-		int powerResult = power(2, i);
+		unsigned long powerResult = power(2, i); //Assign the power with coefficent i to powerResult
 
 		if (numberToConvert >= powerResult) {
 			numberToConvert -= powerResult;
-			result[i] = 1;
+			result = 1;
 		}
 		else {
-			result[i] = 0;
+			result = 0;
 		}
-		std::cout << result[i];
+		std::cout << result;
 	}
 
 	return 0;
@@ -57,12 +59,12 @@ int decimalToBinary(int numberToConvert) { //DOESN'T WORK!
 
 
 int menu(void) { //menu function
-	int number;
+	unsigned long number;
 	std::cout << "Write the number you want to convert: (do not excede 4 billion)\n";
 	std::cin >> number; // input number to convert
 	char selection;
 	std::cout << "\nDo you want to convert this number into a decimal or a binary number?\n"
-		<< "Write \"d\" for decimal or \"b\" for binary.\n";
+		<< "[d] DECIMAL\t[b] BINARY\n";
 	std::cin >> selection;
 
 	//selected BINARY to DECIMAL
@@ -74,7 +76,7 @@ int menu(void) { //menu function
 	//selected DECIMAL to BINARY
 	else if (std::tolower(selection) == 'b')
 	{
-		std::cout << "\nResult: ";
+		
 		decimalToBinary(number);
 	}
 
@@ -91,8 +93,9 @@ int menu(void) { //menu function
 	system("cls");
 
 	if (selection == 'y') menu(); 
-	else if (selection == 'n') return 0; 
+	else if (selection == 'n') system("exit");
 	else std::cout << "Your selection isn't valid. This program will close soon.\n";
+	return 0;
 }
 
 /*MAIN FUNCTION
